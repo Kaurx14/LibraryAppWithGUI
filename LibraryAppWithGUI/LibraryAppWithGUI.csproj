@@ -54,10 +54,4 @@
 	<ItemGroup>
 	  <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
 	</ItemGroup>
-	<ItemGroup>
-	  <None Remove="Resources\LibraryDB.db" />
-	</ItemGroup>
-	<ItemGroup>
-	  <BundleResource Include="Resources\LibraryDB.db" />
-	</ItemGroup>
 </Project>

@@ -1,18 +1,23 @@
 ﻿using System.Data.SQLite;
+using System.Diagnostics;
 
 namespace LibraryAppWithGUI;
 
 public partial class LoginPage : ContentPage
 {
     private SQLiteConnection dbConnection;
+
+    public static string dbFile = "LibraryDB.db";
+    public static string solutionFolder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\..\\..\\Resources\\"));
+    public static string dbFilePath = Path.Combine(solutionFolder, dbFile);
     public LoginPage()
     {
         InitializeComponent();
 
         BindingContext = this;
         // Initializes database connection
-        // The solution that Lauri had, no connection currently
-        dbConnection = new SQLiteConnection("Data Source=/Resources/Library.db;Version=3;");
+        Debug.WriteLine(dbFilePath);
+        dbConnection = new SQLiteConnection(dbFilePath);
         dbConnection.Open();
     }
 
