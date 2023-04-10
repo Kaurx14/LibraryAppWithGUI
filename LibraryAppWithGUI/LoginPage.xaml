@@ -7,17 +7,17 @@
         <Label Text="Login Page"
                VerticalOptions="Center" 
                HorizontalOptions="Center" />
-        <Grid>
-            <Grid.ColumnDefinitions>
-                
-
-            </Grid.ColumnDefinitions>
+        
             <Entry x:Name="emailEntry" Placeholder="email"/>
             <Entry x:Name="passwordEntry" Placeholder="password"
                    IsPassword="True"/>
             <Button x:Name="LoginBtn"
                     Text="Log In"
                     Clicked="OnLoginBtnClicked"/>
-        </Grid> 
+            <Label Text="Not Registered?"/>
+            <Button x:Name="SignupBtn"
+                    Text="Sign Up"
+                    Clicked="OnSignupBtnClicked"/>
+       
     </VerticalStackLayout>
 </ContentPage>

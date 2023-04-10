@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LibraryAppWithGUI.SignupPage"
+             Title="SignupPage">
+    <VerticalStackLayout>
+        <Label Text="Login Page"
+               VerticalOptions="Center" 
+               HorizontalOptions="Center" />
+
+        <Entry x:Name="emailEntry" Placeholder="email"/>
+        <Entry x:Name="firstNameEntry" Placeholder="Your First Name"/>
+        <Entry x:Name="lastNameEntry" Placeholder="Your Last Name"/>
+        <Entry x:Name="passwordEntry" Placeholder="password"
+               IsPassword="True"/>
+        <Button x:Name="SignupBtn"
+                Text="Sign Up"
+                Clicked="OnSignupBtnClicked"/>
+
+    </VerticalStackLayout>
+</ContentPage>
