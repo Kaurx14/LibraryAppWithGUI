@@ -8,8 +8,11 @@ public partial class LoginPage : ContentPage
     private SQLiteConnection dbConnection;
 
     public static string dbFile = "LibraryDB.db";
-    public static string solutionFolder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\..\\..\\Resources\\"));
+    public static string solutionFolder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../../../../Resources/"));
     public static string dbFilePath = Path.Combine(solutionFolder, dbFile);
+
+    public static string connectionString;
+
     public LoginPage()
     {
         InitializeComponent();
@@ -17,8 +20,15 @@ public partial class LoginPage : ContentPage
         BindingContext = this;
         // Initializes database connection
         Debug.WriteLine(dbFilePath);
-        dbConnection = new SQLiteConnection(dbFilePath);
-        dbConnection.Open();
+        Debug.WriteLine(File.Exists(dbFilePath));
+
+        if (File.Exists(dbFilePath))
+        {
+            connectionString = $"Data Source={dbFilePath}";
+            dbConnection = new SQLiteConnection(connectionString);
+            dbConnection.Open();
+        }
+
     }
 
     async void OnLoginBtnClicked(object sender, EventArgs e)
