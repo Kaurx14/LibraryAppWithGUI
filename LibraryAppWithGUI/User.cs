@@ -1,33 +1,23 @@
 ﻿using System;
+
 namespace LibraryAppWithGUI
 {
     public class User
     {
-        public string username;
-        public string id;
+        public string email { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string password { get; set; }
+        public string id { get; set; }
 
-        public User(string username, string id)
-        {
-            this.username = username;
-            this.id = id;
-        }
-
-        public void BorrowedBooks(List<BorrowedBook> borrowedBooks)
-        {
-            List<BorrowedBook> filteredList = borrowedBooks.Where(borrowedBook => borrowedBook.user == this).ToList();
-
-            if (filteredList.Count == 0)
-            {
-                Console.WriteLine("You have not borrowed any books");
-            }
-            else
-            {
-                foreach (BorrowedBook book in filteredList)
-                {
-                    Console.WriteLine($"ISBN: {book.book.isbn}, borrowed on {book.borrowDate.ToString("MM/dd/yyyy")}");
-                }
-            }
-        }
+        //public User(string email, string id, string firstName, string lastName, string password)
+        //{
+        //    this.id = id;
+        //    this.email = email;
+        //    this.firstName = firstName;
+        //    this.lastName = lastName;
+        //    this.password = password;
+        //}
     }
 }
 

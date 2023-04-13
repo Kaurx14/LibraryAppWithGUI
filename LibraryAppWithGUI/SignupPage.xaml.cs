@@ -11,71 +11,56 @@ public partial class SignupPage : ContentPage
     {
         InitializeComponent();
 
-        dbConnection = LoginPage.dbConnection;
-        //dbConnection.CreateTable<User>();
+        dbConnection = new SQLiteConnection(AppManager.connectionString);
     }
 
     async void OnSignupBtnClicked(object sender, EventArgs e)
     {
-        dbConnection.Open();
-
         string email = emailEntry.Text;
         string firstName = firstNameEntry.Text;
         string lastName = lastNameEntry.Text;
         string password = passwordEntry.Text;
 
-        // Add the new user to the database
-        using (var command = new SQLiteCommand("INSERT INTO Users (Email, FirstName, LastName, Password) VALUES (@Email, @FirstName, @LastName, @Password)",
-                   dbConnection))
+        dbConnection.Open();
+
+        var checkUserCommand = new SQLiteCommand("SELECT COUNT (*) FROM Users WHERE Email = @Email", dbConnection);
+        checkUserCommand.Parameters.AddWithValue("@Email", email);
+        int rowsAffected = Convert.ToInt32(checkUserCommand.ExecuteScalar());
+
+        if (!AppManager.userDatabase.AreValidFields(email, firstName, lastName, password))
         {
-            command.Parameters.AddWithValue("@Email", email);
-            command.Parameters.AddWithValue("@FirstName", firstName);
-            command.Parameters.AddWithValue("@LastName", lastName);
-            command.Parameters.AddWithValue("@Password", password);
-            // To check if INSERT statement was successful or not. If was successful, number of rows affected will be greater than 0
-            int rowsAffected = command.ExecuteNonQuery();
+            await DisplayAlert("Error", "Please fill in all the fields correctly", "OK");
+        }
+        else
+        {
+            // Check if the user exists in the database
             if (rowsAffected > 0)
             {
-                // Sign up successful
-                await DisplayAlert("Sign up Successful!", "You were signed up successfully!", "OK");
-                // Navigate to the login page
-                Navigation.PushAsync(new MainPage());
+                // Have to refresh the page or smth because otherwise the database is broken!
+
+                await DisplayAlert("Try again!", "User Already exists", "OK");
             }
             else
             {
-                // Signup failed, username already exists
-                DisplayAlert("Error", "Email already exists", "OK");
+                // Add the new user to the database
+                using (var command = new SQLiteCommand(
+                           "INSERT INTO Users (Email, FirstName, LastName, Password) VALUES (@Email, @FirstName, @LastName, @Password)",
+                           dbConnection))
+                {
+                    command.Parameters.AddWithValue("@Email", email);
+                    command.Parameters.AddWithValue("@FirstName", firstName);
+                    command.Parameters.AddWithValue("@LastName", lastName);
+                    command.Parameters.AddWithValue("@Password", password);
+                    // To check if INSERT statement was successful or not. If was successful, number of rows affected will be greater than 0
+                    command.ExecuteNonQuery();
+
+                    // Sign up successful
+                    await DisplayAlert("Sign up Successful!", "yep", "OK");
+                    // Navigate to the login page
+                    Navigation.PushAsync(new MainPage());
+                }
             }
         }
-
-        //// Check if the username already exists in the database
-        //if (dbConnection.Table<User>().FirstOrDefault(u => u.Email == email) != null)
-        //{
-        //    DisplayAlert("Error", "Username already exists", "OK");
-        //}
-        //else
-        //{
-        //    // Create a new user object with the entered details
-        //    var user = new User
-        //    {
-        //        Username = username,
-        //        Password = password
-        //    };
-
-        //    // Insert the user into the database
-        //    int rowsAffected = dbConnection.Insert(user);
-        //    if (rowsAffected > 0)
-        //    {
-        //        DisplayAlert("Success", "User account created", "OK");
-
-        //        // Navigate back to the login page
-        //        Navigation.PopAsync();
-        //    }
-        //    else
-        //    {
-        //        DisplayAlert("Error", "Unable to create user account", "OK");
-        //    }
-        //}
     }
 
     protected override void OnDisappearing()
